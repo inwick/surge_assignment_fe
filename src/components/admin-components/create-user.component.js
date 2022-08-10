@@ -1,134 +1,90 @@
-import React, { Component } from 'react';
+import React, { useState } from "react";
+import { useRef } from 'react';
 import axios from 'axios';
+import emailjs from '@emailjs/browser';
+import { useNavigate } from 'react-router-dom'
 
-export default class CreateUser extends Component {
-    constructor(props) {
-        super(props);
+const CreateUser = () => {
 
-        this.onChangeEmail = this.onChangeEmail.bind(this);
-        this.onChangePassword = this.onChangePassword.bind(this);
-        // this.onChangeFirstName = this.onChangeFirstName.bind(this);
-        // this.onChangeLastName = this.onChangeLastName.bind(this);
-        // this.onChangeDateOfBirth = this.onChangeDateOfBirth.bind(this);
-        // this.onChangeMobile = this.onChangeMobile.bind(this);
-        // this.onChangeStatus = this.onChangeStatus.bind(this);
-        // this.onChangeAccountType = this.onChangeAccountType.bind(this);
+    const form = useRef();
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [status] = useState(false);
+    const [accountType] = useState("student");
 
-        this.onSubmit = this.onSubmit.bind(this);
+    const navigate = useNavigate();
 
-        this.state = {
-            email: '',
-            password: '',
-            // firstName: '',
-            // lastName: '',
-            // dateOfBirth: new Date(),
-            // mobile: 0,
-            // status: false,
-            // accountType: '',
-        }
-    }
-
-    // onChangeFirstName(e) {
-    //     this.setState({
-    //         firstName: e.target.value
-    //     })
-    // }
-
-    // onChangeLastName(e) {
-    //     this.setState({
-    //         lastName: e.target.value
-    //     })
-    // }
-
-    onChangeEmail(e) {
-        this.setState({
-            email: e.target.value
-        })
-    }
-
-    // onChangeDateOfBirth(e) {
-    //     this.setState({
-    //         dateOfBirth: e.target.value
-    //     })
-    // }
-
-    // onChangeMobile(e) {
-    //     this.setState({
-    //         mobile: e.target.value
-    //     })
-    // }
-
-    // onChangeStatus(e) {
-    //     this.setState({
-    //         status: e.target.value
-    //     })
-    // }
-
-    onChangePassword(e) {
-        this.setState({
-            password: e.target.value
-        })
-    }
-
-    // onChangeAccountType(e) {
-    //     this.setState({
-    //         accountType: e.target.value
-    //     })
-    // }
-
-    onSubmit(e) {
+    function addData(e) {
         e.preventDefault();
 
-        const user = {
-
-            email: this.state.email,
-            password: this.state.password,
-            // firstName: this.state.firstName,
-            // lastName: this.state.lastName,
-            // dateOfBirth: this.state.dateOfBirth,
-            // mobile: this.state.mobile,
-            // status: this.state.status,
-            // accountType: this.state.accountType,
+        const newStudent = {
+            email,
+            password,
+            status,
+            accountType,
         }
 
-        console.log(user);
+        axios.post("http://localhost:5000/user/", newStudent).then((res) => {
+            alert(res.data)
 
-        axios.post('http://localhost:5000/user/add', user)
-            .then(res => console.log(res.data));
+            emailjs.sendForm('service_8bhabuf', 'template_bf3727s', form.current, 'GRR9bFBa7NcPWyN66')
+                .then((result) => {
+                    console.log(result.text);
+                }, (error) => {
+                    console.log(error.text);
+                });
+            e.target.reset()
 
-    }
+            navigate("/login");
+        }).catch((err) => {
+            alert("Registration failed!")
+        })
 
-    render() {
-        return (
-            <div>
-                <h3>Create New User</h3>
-                <form onSubmit={this.onSubmit}>
 
-                    <div className="form-group">
-                        <label>Email: </label>
-                        <input type="email"
-                            required
-                            className="form-control"
-                            value={this.state.email}
-                            onChange={this.onChangeEmail}
-                        />
-                    </div>
+    };
 
-                    <div className="form-group">
-                        <label>Password: </label>
-                        <input type="text"
-                            required
-                            className="form-control"
-                            value={this.state.password}
-                            onChange={this.onChangePassword}
-                        />
-                    </div>
+    return (
+        <section>
 
-                    <div className="form-group">
-                        <input type="submit" value="Create User" className="btn btn-primary" />
-                    </div>
-                </form>
-            </div>
-        )
-    }
+            <h3>Create New User</h3>
+
+            <form ref={form} onSubmit={addData} >
+
+                <div className="form-group">
+                    <label>Email: </label>
+                    <input type="email"
+                        placeholder="Enter email"
+                        required={true}
+                        className="form-control"
+                        name='user_email'
+                        onChange={(e) => {
+                            setEmail(e.target.value);
+                        }}
+                    />
+                </div>
+
+                <div className="form-group">
+                    <label>Password: </label>
+                    <input type="password"
+                        required={true}
+                        className="form-control"
+                        name='message'
+                        placeholder="Enter password"
+                        pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_=+-]).{8,12}$"
+                        title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"
+                        onChange={(e) => {
+                            setPassword(e.target.value);
+                        }}
+                    />
+                </div>
+
+                <div className="form-group">
+                    <input type="submit" value="Create User" className="btn btn-primary" />
+                </div>
+            </form>
+        </section>
+    )
+
 }
+
+export default CreateUser
