@@ -3,10 +3,11 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
 import Navbar from "./components/navbar.component"
+import Login from './components/login.component';
+import HomePage from './components/home-page.component';
+
 import CreateUser from "./components/admin-components/create-user.component";
-// import ExercisesList from "./components/exercises-list.component";
-// import EditExercise from "./components/edit-exercise.component";
-// import CreateUser from "./components/create-user.component";
+
 
 function App() {
   return (
@@ -15,10 +16,9 @@ function App() {
         <Navbar />
         <br />
         <Routes>
-          {/* <Route path="/" exact /> */}
-          <Route path="/create-user" component={CreateUser} />
-          {/* <Route path="/edit/:id" component={EditExercise} /> */}
-          {/* <Route path="/user" component={CreateUser} /> */}
+          <Route path="/" exact element={<HomePage />} />
+          <Route path="/create-user" element={<CreateUser />} />
+          <Route path="/login" element={<Login />} />
         </Routes>
       </div>
     </Router>
