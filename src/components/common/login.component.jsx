@@ -1,9 +1,13 @@
 import { useState } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 import styles from "./styles.module.css";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
+
+    let navigate = useNavigate();
+
     const [data, setData] = useState({ email: "", password: "" });
     const [error, setError] = useState("");
 
@@ -17,7 +21,13 @@ const Login = () => {
             const url = "http://localhost:5000/student-login";
             const { data: res } = await axios.post(url, data);
             localStorage.setItem("token", res.data);
-            window.location = "/";
+
+            if (res.status === 200) {
+                alert("Log in Successfull !!!");
+                navigate("/");
+            } else {
+                alert("Login failed. Re-check your credentials!")
+            }
         } catch (error) {
             if (
                 error.response &&
@@ -58,14 +68,6 @@ const Login = () => {
                             Sing In
                         </button>
                     </form>
-                </div>
-                <div className={styles.right}>
-                    <h1>New Here ?</h1>
-                    <Link to="/signup">
-                        <button type="button" className={styles.white_btn}>
-                            Sing Up
-                        </button>
-                    </Link>
                 </div>
             </div>
         </div>

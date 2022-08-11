@@ -5,9 +5,11 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Navbar from "./components/common/navbar.component"
 import Login from './components/common/login.component';
 import HomePage from './components/common/home-page.component';
+import UpdateUsers from './components/common/update-user.component';
 
 import CreateUser from "./components/admin-components/create-user.component";
 import AdminHome from './components/admin-components/admin-home.component';
+import ViewUser from './components/admin-components/view-user.component';
 
 import AddNote from './components/student-component/add-note.component';
 import StudentHome from './components/student-component/student-home.component';
@@ -23,10 +25,15 @@ function App() {
           <Route path="/" exact element={<HomePage />} />
           <Route path="/create-user" element={<CreateUser />} />
           <Route path="/login" element={<Login />} />
+
           <Route path="/student-home" element={<StudentHome />} />
           <Route path="/student-add-note" element={<AddNote />} />
           <Route path="/student-update-note/:id" element={<UpdateNotes />} />
+
           <Route path="/admin-home" element={<AdminHome />} />
+          <Route path="/update-user" element={<UpdateUsers />} />
+          <Route path="/student-view-user/:id" element={<ViewUser />} />
+
         </Routes>
       </div>
     </Router>
