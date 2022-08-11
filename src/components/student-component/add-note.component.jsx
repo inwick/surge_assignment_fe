@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
-// import "./student.css";
+import "./student.css";
 import { ThemeProvider, Container, Row, Col, Button, Form } from "react-bootstrap";
 
 const AddNote = () => {
@@ -63,16 +63,22 @@ const AddNote = () => {
                                     <div>
                                         <Form.Group >
                                             <label >Title:</label> <br />
-                                            <input type="text" onChange={(e) => {
-                                                setTitle(e.target.value);
-                                            }} required />
+                                            <input type="text"
+                                                placeholder="Title"
+                                                className="form-control"
+                                                onChange={(e) => {
+                                                    setTitle(e.target.value);
+                                                }} required={true} />
                                         </Form.Group><br />
 
                                         <Form.Group >
                                             <label >Description:</label> <br />
-                                            <textarea onChange={(e) => {
-                                                setDescription(e.target.value);
-                                            }} required />
+                                            <textarea
+                                                placeholder="Description"
+                                                className="form-control"
+                                                onChange={(e) => {
+                                                    setDescription(e.target.value);
+                                                }} required={true} />
                                         </Form.Group><br />
 
                                     </div>
