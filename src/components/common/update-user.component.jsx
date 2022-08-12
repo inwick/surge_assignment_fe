@@ -1,28 +1,35 @@
-import React, { useCallback, useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import axios from 'axios';
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { ThemeProvider, Container, Row, Col, Button, Form } from "react-bootstrap";
 import "../student-component/student.css";
 
 const UpdateUsers = () => {
 
     let navigate = useNavigate();
-    const { id } = useParams();
 
-    const [Id, setId] = useState("")
+    // const [dbId, setDBId] = useState("");
+    const [Id, setId] = useState()
     const [FirstName, setFirstName] = useState("")
     const [LastName, setLastName] = useState("")
     const [Email, setEmail] = useState("")
-    const [DateOfBirth, setDateOfBirth] = useState("")
-    const [Mobile, setMobile] = useState("")
+    const [DateOfBirth, setDateOfBirth] = useState()
+    const [Mobile, setMobile] = useState()
     const [Status, setStatus] = useState(true)
     const [Password, setPassword] = useState("")
+    const [AccountType, setAccountType] = useState("")
+    const temp = sessionStorage.getItem("loggeduser")
 
-    const fetchData = useCallback(async () => {
+    const fetchData = async () => {
+
+        // setDBId(sessionStorage.getItem("loggeduser"))
+
+        console.log("TheID", temp);
         try {
+            // if (dbId != null) {
             const UserData = await axios({
                 method: 'GET',
-                url: `http://localhost:5000/note/${id}`
+                url: `http://localhost:5000/user/${temp}`
             })
             let IData = UserData.data;
             setId(IData.id)
@@ -33,36 +40,40 @@ const UpdateUsers = () => {
             setMobile(IData.mobile)
             setStatus(IData.status)
             setPassword(IData.password)
+            setAccountType(IData.accountType)
+            // }
+
         } catch (error) {
             alert(error);
         };
 
-    }, [id]);
+    };
 
     useEffect(() => {
         fetchData()
-    }, [fetchData])
+    }, [])
 
     const submitDetails = async (e) => {
         e.preventDefault();
         try {
-            const data = {
+            const updateData = {
                 id: Id,
                 firstName: FirstName,
                 lastName: LastName,
                 email: Email,
                 dateOfBirth: DateOfBirth,
                 mobile: Mobile,
-                status: Status,
+                status: true,
                 password: Password,
+                accountType: "Student",
             }
-            console.log(data);
+            console.log("update data", updateData);
 
-            const response = await axios.post(`http://localhost:5000/user/update/${id}`, data)
+            const response = await axios.put(`http://localhost:5000/user/update/${temp}`, updateData)
 
             if (response.status === 200) {
                 alert("User Updated!!!");
-                navigate("/login");
+                navigate("/student-home");
             }
 
         } catch (error) {
@@ -77,12 +88,10 @@ const UpdateUsers = () => {
             <Container>
 
                 <div style={{ marginTop: '50px' }} className='list-title'>
-                    <hr />
                     <center>
                         <h2> Set Your User Profile </h2>
                     </center>
-                    <hr />
-                    <br /><br /><br />
+                    <br />
                 </div>
 
 
@@ -93,15 +102,14 @@ const UpdateUsers = () => {
                                 <Col>
 
                                     <div>
-
                                         <Form.Group  >
-                                            <label >ID:</label> <br />
-                                            <input type="text" value={Id} disabled />
+                                            <label >User ID:</label> <br />
+                                            <input type="text" value={Id} readOnly />
                                         </Form.Group>
 
                                         <Form.Group  >
                                             <label >Email:</label> <br />
-                                            <input type="text" value={Email} disabled />
+                                            <input type="text" value={Email} readOnly />
                                         </Form.Group>
 
                                         <Form.Group >
@@ -120,7 +128,7 @@ const UpdateUsers = () => {
 
                                         <Form.Group >
                                             <label >Date of Birth:</label> <br />
-                                            <input type="text" value={DateOfBirth} onChange={(e) => {
+                                            <input type="date" value={DateOfBirth} onChange={(e) => {
                                                 setDateOfBirth(e.target.value);
                                             }} required />
                                         </Form.Group><br />
@@ -133,23 +141,23 @@ const UpdateUsers = () => {
                                         </Form.Group><br />
 
                                         <Form.Group >
-                                            <label >Password:</label> <br />
-                                            <input type="password" value={Password} onChange={(e) => {
+                                            <label >Add New Password:</label> <br />
+                                            <input type="password" onChange={(e) => {
                                                 setPassword(e.target.value);
                                             }} required />
                                         </Form.Group><br />
 
-
                                     </div>
 
                                     <br />
-                                    <Button id='btn-common' variant="primary" type='submit'>Update Profile</Button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <Button id='btn-common' variant="primary" type='submit' style={{ width: '200px' }}>Update Profile</Button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                     <Button variant="outline-secondary" onClick={() => { navigate("/login") }}>Cancel</Button>
-
+                                    <br /><br />
                                 </Col>
 
                             </Row>
                         </form >
+                        <br />
                     </div></div>
             </Container >
         </ThemeProvider >

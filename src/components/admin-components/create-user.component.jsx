@@ -22,7 +22,7 @@ const CreateUser = () => {
     const [mobile] = useState("");
     const [password, setPassword] = useState("");
     const [status] = useState(false);
-    const [accountType] = useState("student");
+    const [accountType] = useState("Student");
 
     const navigate = useNavigate();
 
@@ -40,6 +40,8 @@ const CreateUser = () => {
             status,
             accountType,
         }
+
+        console.log(newStudent);
 
         axios.post("http://localhost:5000/user/", newStudent).then((res) => {
             alert(res.data)

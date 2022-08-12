@@ -1,132 +1,139 @@
-import React, { useCallback, useState, useEffect } from 'react'
-import axios from 'axios'
+import React, { Component, Fragment } from 'react';
+import ReactDatatable from '@ashvin27/react-datatable';
+import axios from 'axios';
 import { Link } from 'react-router-dom'
-import { ThemeProvider, Container, Table, Row, Col } from "react-bootstrap";
-import { faEye } from '@fortawesome/free-regular-svg-icons'
-import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import "./admin.css";
-import Pagination from './Pagination';
 
-const AdminHome = () => {
-
-    const [Users, setUsers] = useState([])
-    const [currentPage, setCurrentPage] = useState(1);
-    const [indexOfFirstItem, setindexOfFirstItem] = useState(0);
-    const [indexOfLastItem, setindexOfLastItem] = useState(3);
-    const [recordsPerPage] = useState(4);
-    const [retrievedData, setretrievedData] = useState([])
-
-    //fetch and set retrived data 
-    const fetchData = useCallback(async () => {
-        try {
-            const UsersData = await axios({
-                method: 'GET',
-                url: `http://localhost:5000/user`
-            })
-            setUsers(UsersData.data)
-            setretrievedData(UsersData.data)
-        } catch (error) {
-            alert(error);
+export default class AdminHome extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            firstName: '',
+            lastName: '',
+            id: '',
+            email: '',
+            _id: '',
         }
-    }, [])
+        this.columns = [
+            {
+                key: "id",
+                text: "User ID",
+                className: "name",
+                align: "left",
+                sortable: true,
+            },
+            {
+                key: "firstName",
+                text: "First Name",
+                className: "address",
+                align: "left",
+                sortable: true
+            },
+            {
+                key: "lastName",
+                text: "Last Name",
+                className: "address",
+                align: "left",
+                sortable: true
+            },
+            {
+                key: "email",
+                text: "Email",
+                className: "address",
+                align: "left",
+                sortable: true
+            },
+            {
+                key: "action",
+                text: "View",
+                className: "action",
+                width: 100,
+                align: "left",
+                sortable: false,
+                cell: record => {
+                    return (
 
-    useEffect(() => {
-        fetchData()
-    }, [fetchData])
+                        <Fragment>
+                            <Link to={`/student-view-user/${record._id}`} > <button
+                                className="btn btn-primary btn-sm"
+                                style={{ marginRight: '5px' }}>
+                                View
+                            </button></Link>
+                        </Fragment >
+                    );
+                }
+            },
 
-    //slice retrieved data for the pagination
-    const SlicedUsers = Users.slice(indexOfFirstItem, indexOfLastItem);
-
-    // //filter data
-    const filterData = (obj, key) => {
-
-        const results = obj.filter(o =>
-            Object.keys(o).some(k => o[k].toString().toLowerCase().includes(key.toLowerCase())));
-
-        setUsers(results);
-
+        ];
+        this.config = {
+            page_size: 5,
+            length_menu: [10, 20, 50],
+            button: {
+                excel: false,
+                print: false,
+                extra: false,
+            },
+        }
+        this.extraButtons = [
+            {
+                className: "btn btn-primary buttons-pdf",
+                title: "Export TEst",
+                children: [
+                    <span>
+                        <i className="glyphicon glyphicon-print fa fa-print" aria-hidden="true"></i>
+                    </span>
+                ],
+                onClick: (event) => {
+                    console.log(event);
+                },
+            },
+            {
+                className: "btn btn-primary buttons-pdf",
+                title: "Export TEst",
+                children: [
+                    <span>
+                        <i className="glyphicon glyphicon-print fa fa-print" aria-hidden="true"></i>
+                    </span>
+                ],
+                onClick: (event) => {
+                    console.log(event);
+                },
+                onDoubleClick: (event) => {
+                    console.log("doubleClick")
+                }
+            },
+        ]
     }
 
-    //search function
-    const handleSearch = (e) => {
-
-        const k = e.target.value.toLowerCase()
-
-        filterData(retrievedData, k);
-
+    componentDidMount(props) {
+        axios.get("http://localhost:5000/user")
+            .then(res => {
+                this.setState({ records: res.data });
+            }
+            )
     }
 
-    return (
-        <ThemeProvider breakpoints={['xxxl', 'xl', 'lg', 'md', 'sm', 'xs', 'xxs']}>
+    setErrorMsg(err) {
+        this.setState = {
+            errorMsg: err
+        }
+    }
 
-            <Container><br /><br />
-                <div className="headingModsLand" style={{ marginBottom: "30px", marginTop: "20px" }}> <h1>  Admin Home  </h1> </div>
-
-                <div className="fontuser" style={{ float: 'right' }}>
-
-                    <input className='main-search' placeholder="Search" type="text" name="search" style={{ width: '400px', height: '40px', marginLeft: '100px' }} onChange={(e) => {
-                        handleSearch(e);
-                    }} />
-                    <i><FontAwesomeIcon icon={faMagnifyingGlass} /></i>
-
-
-                </div><br /><br /><br />
-
-
-                <Row className="list-title">
-                    <Col>
-                        <h2 style={{ fontWeight: '600' }}>Users List</h2>
-                    </Col>
-                    <Col className='d-flex justify-content-end'>
-                        <Link className='btn btn-outline-primary' to={("/create-user")} >Create New User</Link>
-                    </Col>
-                </Row>
-
-                <Row style={{ marginTop: '50px', marginBottom: '50px' }} className='body-content'>
-                    {SlicedUsers.length > 0 ?
-                        <Table responsive hover>
-
-                            <thead>
-                                <tr>
-                                    <th>ID </th>
-                                    <th>Name</th>
-                                    <th>Email</th>
-                                    <th>View</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {
-                                    SlicedUsers && SlicedUsers.map((user) => (
-                                        <tr>
-                                            <td key="itemId">{user.id}</td>
-                                            <td key="itemName">{user.firstName} {user.lastName}</td>
-                                            <td key="emailId">{user.email}</td>
-                                            <td> <Link to={`/student-view-user/${user._id}`} ><FontAwesomeIcon icon={faEye} /></Link> </td>
-                                        </tr>
-                                    ))
-                                }
-
-                            </tbody>
-                        </Table>
-                        : <span style={{ display: 'flex', justifyContent: 'center' }}>
-                            Entries Unavailable !
-                        </span>
-                    }
-                    <Pagination
-                        itemsCount={Users.length}
-                        itemsPerPage={recordsPerPage}
-                        currentPage={currentPage}
-                        setCurrentPage={setCurrentPage}
-                        setindexOfLastItem={setindexOfLastItem}
-                        setindexOfFirstItem={setindexOfFirstItem}
-                        alwaysShown={false}
-                    />
-                </Row>
-            </Container>
-        </ThemeProvider >
-
-    )
+    render() {
+        return (
+            <div>
+                <hr />
+                <h4>User accounts</h4>
+                <Link style={{ float: "right", marginTop: "-43px" }} className='btn btn-outline-primary' to={("/create-user")} >Create New User</Link>
+                <hr />
+                <br />
+                <ReactDatatable
+                    config={this.config}
+                    records={this.state.records}
+                    columns={this.columns}
+                    extraButtons={this.extraButtons}
+                />
+            </div>
+        )
+    }
 }
 
-export default AdminHome;
