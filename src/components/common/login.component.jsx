@@ -1,6 +1,5 @@
 import { useState } from "react";
 import axios from "axios";
-// import { Link } from "react-router-dom";
 import styles from "./styles.module.css";
 import { useNavigate } from "react-router-dom";
 
@@ -20,11 +19,22 @@ const Login = () => {
         try {
             const url = "http://localhost:5000/student-login";
             const { data: res } = await axios.post(url, data);
-            localStorage.setItem("token", res.data);
+
+            console.log("HI", res.user.accountType);
 
             if (res.status === 200) {
                 alert("Log in Successfull !!!");
-                navigate("/");
+
+                if (res.user.status === false) {
+                    window.sessionStorage.setItem("loggeduser", res.user._id);
+                    console.log("sessionID", res.user._id);
+                    navigate("/update-user");
+                } else if (res.user.accountType === 'Admin') {
+                    navigate("/admin-home");
+                } else {
+                    navigate("/student-home");
+                }
+
             } else {
                 alert("Login failed. Re-check your credentials!")
             }
@@ -65,7 +75,7 @@ const Login = () => {
                         />
                         {error && <div className={styles.error_msg}>{error}</div>}
                         <button type="submit" className={styles.green_btn}>
-                            Sing In
+                            Sign In
                         </button>
                     </form>
                 </div>

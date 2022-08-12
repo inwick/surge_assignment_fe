@@ -15,7 +15,7 @@ const ViewUser = () => {
     const [Email, setEmail] = useState("")
     const [DateOfBirth, setDateOfBirth] = useState("")
     const [Mobile, setMobile] = useState("")
-    const [Status, setStatus] = useState("")
+    const [AccountType, setAccountType] = useState("")
 
     const fetchData = useCallback(async () => {
         try {
@@ -30,7 +30,7 @@ const ViewUser = () => {
             setEmail(IData.email)
             setDateOfBirth(IData.dateOfBirth)
             setMobile(IData.mobile)
-            setStatus(IData.status)
+            setAccountType(IData.accountType)
 
         } catch (error) {
             alert(error);
@@ -96,8 +96,8 @@ const ViewUser = () => {
                                         </Form.Group><br />
 
                                         <Form.Group >
-                                            <label >Status:</label> <br />
-                                            <input type="text" value={Status} disabled />
+                                            <label >Account Type:</label> <br />
+                                            <input type="text" value={AccountType} disabled />
                                         </Form.Group><br />
 
                                     </div>
