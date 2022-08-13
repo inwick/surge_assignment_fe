@@ -41,16 +41,14 @@ const CreateUser = () => {
             accountType,
         }
 
-        console.log(newStudent);
-
         axios.post("http://localhost:5000/user/", newStudent).then((res) => {
             alert(res.data)
 
             emailjs.sendForm('service_8bhabuf', 'template_bf3727s', form.current, 'GRR9bFBa7NcPWyN66')
                 .then((result) => {
-                    console.log("good", result.text);
+                    console.log("email sent", result.text);
                 }, (error) => {
-                    console.log("bad", error.text);
+                    console.log("email not sent", error.text);
                 });
             e.target.reset()
 
@@ -126,46 +124,6 @@ const CreateUser = () => {
                     </div></div>
             </Container >
         </ThemeProvider>
-
-        // <section>
-
-        //     <h3>Create New User</h3>
-
-        //     <form ref={form} onSubmit={addData} >
-
-        //         <div className="form-group">
-        //             <label>Email: </label>
-        //             <input type="email"
-        //                 placeholder="Enter email"
-        //                 required={true}
-        //                 className="form-control"
-        //                 name='user_email'
-        //                 onChange={(e) => {
-        //                     setEmail(e.target.value);
-        //                 }}
-        //             />
-        //         </div>
-
-        //         <div className="form-group">
-        //             <label>Password: </label>
-        //             <input type="password"
-        //                 required={true}
-        //                 className="form-control"
-        //                 name='message'
-        //                 placeholder="Enter password"
-        //                 pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_=+-]).{8,12}$"
-        //                 title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"
-        //                 onChange={(e) => {
-        //                     setPassword(e.target.value);
-        //                 }}
-        //             />
-        //         </div>
-
-        //         <div className="form-group">
-        //             <input type="submit" value="Create User" className="btn btn-primary" />
-        //         </div>
-        //     </form>
-        // </section>
     )
 
 }

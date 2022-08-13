@@ -8,7 +8,6 @@ const UpdateUsers = () => {
 
     let navigate = useNavigate();
 
-    // const [dbId, setDBId] = useState("");
     const [Id, setId] = useState()
     const [FirstName, setFirstName] = useState("")
     const [LastName, setLastName] = useState("")
@@ -22,11 +21,7 @@ const UpdateUsers = () => {
 
     const fetchData = async () => {
 
-        // setDBId(sessionStorage.getItem("loggeduser"))
-
-        console.log("TheID", temp);
         try {
-            // if (dbId != null) {
             const UserData = await axios({
                 method: 'GET',
                 url: `http://localhost:5000/user/${temp}`
@@ -41,7 +36,6 @@ const UpdateUsers = () => {
             setStatus(IData.status)
             setPassword(IData.password)
             setAccountType(IData.accountType)
-            // }
 
         } catch (error) {
             alert(error);
@@ -67,7 +61,6 @@ const UpdateUsers = () => {
                 password: Password,
                 accountType: "Student",
             }
-            console.log("update data", updateData);
 
             const response = await axios.put(`http://localhost:5000/user/update/${temp}`, updateData)
 
@@ -90,6 +83,7 @@ const UpdateUsers = () => {
                 <div style={{ marginTop: '50px' }} className='list-title'>
                     <center>
                         <h2> Set Your User Profile </h2>
+                        <h6 style={{ color: 'red' }}> Make sure to Add a new password !</h6>
                     </center>
                     <br />
                 </div>
@@ -103,14 +97,12 @@ const UpdateUsers = () => {
 
                                     <div>
                                         <Form.Group  >
-                                            <label >User ID:</label> <br />
-                                            <input type="text" value={Id} readOnly />
-                                        </Form.Group>
+                                            <b><label >Your User ID is :</label> {Id} <br /></b>
+                                        </Form.Group><br />
 
                                         <Form.Group  >
-                                            <label >Email:</label> <br />
-                                            <input type="text" value={Email} readOnly />
-                                        </Form.Group>
+                                            <b> <label >Email:</label> {Email} <br /></b>
+                                        </Form.Group><br />
 
                                         <Form.Group >
                                             <label >First Name:</label> <br />
@@ -135,9 +127,12 @@ const UpdateUsers = () => {
 
                                         <Form.Group >
                                             <label >Mobile:</label> <br />
-                                            <input type="text" value={Mobile} onChange={(e) => {
-                                                setMobile(e.target.value);
-                                            }} required />
+                                            <input type="text" value={Mobile}
+                                                pattern="[0-9]{10}"
+                                                title="Must contain 10 numbers for the mobile number"
+                                                onChange={(e) => {
+                                                    setMobile(e.target.value);
+                                                }} required />
                                         </Form.Group><br />
 
                                         <Form.Group >

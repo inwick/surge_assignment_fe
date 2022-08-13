@@ -16,7 +16,7 @@ const UpdateNotes = () => {
         try {
             const NoteData = await axios({
                 method: 'GET',
-                url: `http://localhost:5000/note/${id}`
+                url: `http://localhost:5000/note/byId/${id}`
             })
             let IData = NoteData.data;
             setTitle(IData.title)
@@ -40,7 +40,6 @@ const UpdateNotes = () => {
                 title: Title,
                 description: Description,
             }
-            // console.log(data);
 
             const response = await axios.post(`http://localhost:5000/note/update/${id}`, data)
 
@@ -79,14 +78,14 @@ const UpdateNotes = () => {
                                     <div>
 
                                         <Form.Group  >
-                                            <label >Title:</label> <br />
+                                            <b> <label >Title:</label> <br /></b>
                                             <input type="text" value={Title} onChange={(e) => {
                                                 setTitle(e.target.value);
-                                            }} required />
+                                            }} required /> <br /><br />
                                         </Form.Group>
 
                                         <Form.Group >
-                                            <label >Description:</label> <br />
+                                            <b>  <label >Description:</label> <br /></b>
                                             <textarea value={Description} onChange={(e) => {
                                                 setDescription(e.target.value);
                                             }} required />

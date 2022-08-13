@@ -20,22 +20,20 @@ const Login = () => {
             const url = "http://localhost:5000/student-login";
             const { data: res } = await axios.post(url, data);
 
-            console.log("HI", res.user.accountType);
-
             if (res.status === 200) {
                 alert("Log in Successfull !!!");
 
                 if (res.user.status === false) {
                     window.sessionStorage.setItem("loggeduser", res.user._id);
-                    console.log("sessionID", res.user._id);
                     navigate("/update-user");
                 } else if (res.user.accountType === 'Admin') {
                     navigate("/admin-home");
                 } else {
                     navigate("/student-home");
+                    window.sessionStorage.setItem("loggeduser", res.user._id);
                 }
 
-            } else {
+            } else if (res.status === 401) {
                 alert("Login failed. Re-check your credentials!")
             }
         } catch (error) {

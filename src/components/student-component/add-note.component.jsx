@@ -12,15 +12,18 @@ const AddNote = () => {
     const [title, setTitle] = useState("")
     const [description, setDescription] = useState("")
 
+    const dbId = sessionStorage.getItem("loggeduser")
+
     //submit details
     const submitDetails = async (e) => {
+
         e.preventDefault();
         try {
             const note = {
                 title,
                 description,
+                stdId: dbId,
             }
-            // console.log(note);
 
             const response = await axios.post("http://localhost:5000/note/add", note)
 

@@ -4,7 +4,6 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
 import Navbar from "./components/common/navbar.component"
 import Login from './components/common/login.component';
-import HomePage from './components/common/home-page.component';
 import UpdateUsers from './components/common/update-user.component';
 
 import CreateUser from "./components/admin-components/create-user.component";
@@ -22,9 +21,9 @@ function App() {
         <Navbar />
         <br />
         <Routes>
-          <Route path="/" exact element={<HomePage />} />
+          <Route path="/" exact element={<Login />} />
           <Route path="/create-user" element={<CreateUser />} />
-          <Route path="/login" element={<Login />} />
+          <Route path="/login" exact element={<Login />} />
 
           <Route path="/student-home" element={<StudentHome />} />
           <Route path="/student-add-note" element={<AddNote />} />

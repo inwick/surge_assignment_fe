@@ -5,6 +5,8 @@
 }
 
 input[type=text],
+[type=password],
+[type=date],
 input[type=datetime-local],
 textarea {
     width: 350px;

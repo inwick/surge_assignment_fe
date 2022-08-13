@@ -1,7 +1,6 @@
 import React, { useCallback, useState, useEffect } from 'react'
 import axios from 'axios';
 import { useNavigate, useParams } from "react-router-dom";
-import { ThemeProvider, Container, Row, Col, Button, Form } from "react-bootstrap";
 import "./admin.css";
 
 const ViewUser = () => {
@@ -43,75 +42,43 @@ const ViewUser = () => {
     }, [fetchData])
 
     return (
-        <ThemeProvider breakpoints={['xxxl', 'xl', 'lg', 'md', 'sm', 'xs', 'xxs']}>
+        <div>
 
-            <Container>
+            <header class="section">
+                <section class="full-width ">
+                    <div className="row">
 
-                <div className='list-title'>
+                        <div className="headingViewMods" style={{ marginBottom: "20px" }}> <h4> Details of the User</h4> </div>
 
-                    <center>
-                        <h2> Student Profile </h2>
-                    </center>
+                        <div class="containerViewADM" >
 
-                    <br /><br /><br />
-                </div>
+                            <div class="containerViewHeadingADM ">
+                                <div class="containerViewH1ADM ">
+                                    {FirstName} {LastName}
+                                </div>
+                                <div class="pViewADM">
 
+                                    <div className="view">
 
-                <div className="row justify-content-md-center">
-                    <div className='col-md-4'>
-                        <form className="body-content">
-                            <Row style={{ marginTop: '20px' }}>
-                                <Col>
-
-                                    <div>
-
-                                        <Form.Group  >
-                                            <label >ID:</label> <br />
-                                            <input type="text" value={Id} disabled />
-                                        </Form.Group>
-
-                                        <Form.Group >
-                                            <label >First Name:</label> <br />
-                                            <input type="text" value={FirstName} disabled />
-                                        </Form.Group><br />
-
-                                        <Form.Group >
-                                            <label >Last Name:</label> <br />
-                                            <input type="text" value={LastName} disabled />
-                                        </Form.Group><br />
-
-                                        <Form.Group >
-                                            <label >Email:</label> <br />
-                                            <input type="text" value={Email} disabled />
-                                        </Form.Group><br />
-
-                                        <Form.Group >
-                                            <label >Date of Birth:</label> <br />
-                                            <input type="text" value={DateOfBirth} disabled />
-                                        </Form.Group><br />
-
-                                        <Form.Group >
-                                            <label >Mobile:</label> <br />
-                                            <input type="text" value={Mobile} disabled />
-                                        </Form.Group><br />
-
-                                        <Form.Group >
-                                            <label >Account Type:</label> <br />
-                                            <input type="text" value={AccountType} disabled />
-                                        </Form.Group><br />
+                                        <p>   <b>User Id :-</b>   {Id} </p>
+                                        <p>   <b>Email :-</b>  {Email} </p>
+                                        <p>   <b>Date of Birth :-</b>  {DateOfBirth} </p>
+                                        <p>   <b>Mobile Number :-</b>  {Mobile} </p>
+                                        <p>   <b>Account Type :-</b>  {AccountType}</p>
 
                                     </div>
+                                    <div className="btnBack">
+                                        <button onClick={() => { navigate("/admin-home") }} style={{ marginLeft: "50px" }}>Back</button>
+                                    </div>
+                                    <br /><br />
+                                </div>
 
-                                    <br />
-                                    <Button variant="outline-secondary" onClick={() => { navigate("/admin-home") }}>Back</Button>
-
-                                </Col>
-
-                            </Row>
-                        </form >
-                    </div></div>
-            </Container >
-        </ThemeProvider >
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </header>
+        </div>
     )
 }
 
