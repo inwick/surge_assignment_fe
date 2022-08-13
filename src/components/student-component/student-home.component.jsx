@@ -15,23 +15,23 @@ const StudentHome = () => {
     const [indexOfLastItem, setindexOfLastItem] = useState(3);
     const [recordsPerPage] = useState(4);
 
+    const STDID = sessionStorage.getItem("loggeduser")
+
     //fetch and set retrived data 
     const fetchData = useCallback(async () => {
-
-        // const userId = JSON.parse(sessionStorage.getItem("loggeduser")).email;
-        // console.log("session", userId);
 
         try {
             const NotesData = await axios({
                 method: 'GET',
-                url: `http://localhost:5000/note`
+                url: `http://localhost:5000/note/${STDID}`
             })
             setNotes(NotesData.data)
-            // setretrievedData(NotesData.data)
+
+
         } catch (error) {
             alert(error);
         }
-    }, [])
+    }, [STDID])
 
     useEffect(() => {
         fetchData()
